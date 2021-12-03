@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     [Header("Sensitivity mouse")]
     public float sensitivityMouse = 200f;
 
-    public bool invertedCameraRotation = false;
+    public bool invertedCameraRotation;
 
     public Transform player;
     
@@ -26,18 +26,20 @@ public class CameraController : MonoBehaviour
         _mouseY = Input.GetAxis("Mouse Y") * sensitivityMouse * Time.deltaTime;
         
         var transform1 = transform;
-        player.Rotate(_mouseX * new Vector3(0, 1, 0));
+        transform1.localPosition = player.position;
         if (!invertedCameraRotation)
         {
+            player.Rotate(_mouseX * new Vector3(0, 1, 0));
+            player.position.Set(0, 0, transform1.localPosition.z);
             transform1.Rotate(_mouseX * new Vector3(0, 1, 0));
             transform1.Rotate(-_mouseY * new Vector3(1, 0, 0));
         }
         else
         {
+            player.Rotate(-_mouseX * new Vector3(0, 1, 0));
+            player.position.Set(0, 0, transform1.localPosition.z);
             transform1.Rotate(-_mouseX * new Vector3(0, 1, 0));
-            transform1.Rotate(+_mouseY * new Vector3(1, 0, 0));
+            transform1.Rotate(_mouseY * new Vector3(1, 0, 0));
         }
-        
-        transform1.localPosition = player.position;
     }
 }

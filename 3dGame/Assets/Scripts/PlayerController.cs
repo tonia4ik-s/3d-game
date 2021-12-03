@@ -9,11 +9,11 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 15f;
 
     public float jumpPower = 200f;
-
-    public bool isOnTheGround;
-
+    
     public Rigidbody rb;
     
+    private bool _isOnTheGround;
+    private int _jumpsCounter;
     private void Update()
     {
         GetInput();
@@ -72,9 +72,15 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (isOnTheGround)
+            if (_isOnTheGround)
+            {
+                _jumpsCounter = 0;
+            }
+
+            if (_jumpsCounter < 2)
             {
                 rb.AddForce(transform.up * jumpPower);
+                _jumpsCounter++;
             }
         }
     }
@@ -83,7 +89,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag($"Ground"))
         {
-            isOnTheGround = true;
+            _isOnTheGround = true;
         }
     }
 
@@ -91,7 +97,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag($"Ground"))
         {
-            isOnTheGround = false;
+            _isOnTheGround = false;
         }
     }
 }
